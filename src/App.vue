@@ -31,12 +31,21 @@ export default {
 .sidebar {
   width: 250px;
   flex-shrink: 0; /* Empêche le rétrécissement */
+  position: fixed; /* Fixe la barre latérale */
+  left: 0;
+  top: 0;
+  height: 100vh; /* Prend toute la hauteur */
+  background-color: #bbdfc6;
 }
 
 /* Contenu dynamique qui prend tout l'espace restant */
 .content {
-  flex-grow: 1; /* Prend tout l’espace disponible */
+  flex-grow: 1;
+  margin-left: 300px; /* Décale le contenu pour éviter de passer sous la sidebar */
   padding: 20px;
   overflow-y: auto; /* Permet le scroll si besoin */
+  width: calc(100% - 300px); /* Ajuste la largeur */
 }
+
+
 </style>

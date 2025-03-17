@@ -111,13 +111,14 @@ export default {
 
 .submenu li {
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
   padding: 8px;
   font-size: 16px;
   border-radius: 5px;
 }
 
 .submenu li:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #c8edd9; /* Teinte encore plus foncée au survol */
 }
 
 /* FLECHE DE ROTATION */
