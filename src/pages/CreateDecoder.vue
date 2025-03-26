@@ -1,179 +1,236 @@
+<style scoped>
+
+.background-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #dfefe3; /* Assure-toi qu'une couleur de fond est appliquée */
+}
+
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  justify-content: center;
+
+}
+
+.form:hover {
+  box-shadow: 0 0 20px rgba(2, 140, 81, 0.4);
+  justify-content: center;
+
+}
+
+.title {
+  font-size: 26px;
+  color: #028C51;
+  font-weight: 600;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+
+
+}
+
+.title::before,
+.title::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #028C51;
+}
+
+.title::after {
+  animation: pulse 1.2s linear infinite;
+  justify-content: center;
+}
+
+.form label {
+  position: relative;
+}
+
+.form label .input {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.form label .input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: grey;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:focus + span,
+.form label .input:valid + span {
+  top: 30px;
+  font-size: 0.75em;
+  font-weight: 600;
+  background-color: #ffffff;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* 🌟 STYLE DES BOUTONS 🌟 */
+button {
+  display: flex;
+  cursor: pointer; /* Ajout de la propriété pour le curseur */
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 40px;
+  padding: 14px 24px;
+  transition: 0.3s;
+  box-shadow: -4px -2px 16px 0px #ffffff, 4px 2px 16px 0px rgba(2, 140, 81, 0.5);
+}
+
+.submit {
+  background-color: #028C51;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.submit:hover {
+  background-color: #026B3F;
+  box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px rgba(2, 140, 81, 0.6);
+}
+
+.cancel {
+  background-color: #BBDFC6;
+  color: #028C51;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancel:hover {
+  background-color: #99C8A6;
+  box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px rgba(187, 223, 198, 0.5);
+}
+
+button:active {
+  box-shadow: none;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+
+
+/* Pour les autres champs (Modèle, Client) garder l'ancien style */
+.form label .input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: grey;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+</style>
+
 <template>
-  <div class="create-decoder">
-    <h2>Créer un Décodeur</h2>
-    <form @submit.prevent="submitForm">
-      <!-- ID (automatique) -->
-      <div class="form-group">
-        <label for="id">ID (automatique)</label>
-        <input type="text" id="id" v-model="decoder.id" disabled />
-      </div>
+  <div class="background-wrapper">
+    <div class="finisher-header"></div>
+    <div class="container">
+      <form class="form">
+        <p class="title">Ajouter un décodeur</p>
 
-      <!-- Nom du Décodeur -->
-      <div class="form-group">
-        <label for="nomDecodeur">Nom du Décodeur</label>
-        <input type="text" id="nomDecodeur" v-model="decoder.nomDecodeur" disabled />
-      </div>
+        <label>
+          <input required v-model="model" type="text" class="input">
+          <span>Modèle</span>
+        </label>
 
-      <!-- État du Décodeur -->
-      <div class="form-group">
-        <label for="etatDecodeur">État du Décodeur</label>
-        <select v-model="decoder.etatDecodeur" id="etatDecodeur" required>
-          <option value="Redémarré">Redémarré</option>
-          <option value="Réinitialisé">Réinitialisé</option>
-          <option value="Éteint">Éteint</option>
-          <option value="Non fonctionnel">Non fonctionnel</option>
-          <option value="Activé">Activé</option>
-        </select>
-      </div>
 
-      <!-- Boutons -->
-      <div class="form-buttons">
-        <button type="button" @click="resetForm">Réinitialiser</button>
-        <button type="submit">Valider</button>
-      </div>
-    </form>
+        <label>
+          <select v-model="selectedClient" class="input" required>
+            <option v-for="client in clients" :key="client.id" :value="client.id">
+              {{ client.name }}
+            </option>
+          </select>
+          <span>Client Associé</span>
+        </label>
+
+        <div class="button-group">
+          <button class="submit">Valider</button>
+          <button type="button" class="cancel">Annuler</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      // Définir les champs du décodeur
-      decoder: {
-        id: null,
-        nomDecodeur: '',
-        etatDecodeur: 'Redémarré',
-      },
-    };
-  },
-  methods: {
-    // Réinitialiser les champs du formulaire
-    resetForm() {
-      this.decoder.nomDecodeur = `Decodeur_${Date.now()}`; // Créer un nom automatique
-      this.decoder.etatDecodeur = 'Redémarré'; // Réinitialiser l'état
-    },
-    // Valider et soumettre le formulaire
-    submitForm() {
-      // Vérifier si le formulaire est valide
-      if (this.decoder.etatDecodeur && this.decoder.nomDecodeur) {
-        // Afficher une fenêtre de confirmation
-        if (confirm('La création a été effectuée. Voulez-vous assigner des chaînes TV à ce nouveau décodeur ?')) {
-          // Rediriger vers la page d'association des chaînes
-          this.$router.push('/associate-channel');
-        } else {
-          // Réinitialiser le formulaire et revenir à la page de création
-          this.resetForm();
-        }
-      } else {
-        alert('Veuillez remplir tous les champs.');
-      }
-    },
-  },
-  mounted() {
-    this.resetForm(); // Initialiser les valeurs du formulaire
-  },
+<script setup lang="ts">
+import { ref } from 'vue';
+
+// Données du formulaire
+const model = ref('');
+const decoderName = ref('');
+const decoderId = ref('');
+
+// Liste des clients (exemple)
+const clients = ref([
+  { id: 1, name: 'Client 1' },
+  { id: 2, name: 'Client 2' },
+  { id: 3, name: 'Client 3' }
+]);
+
+const selectedClient = ref(null);
+
+// Génère un ID de décodeur aléatoire
+const generateRandomId = () => {
+  return Math.floor(Math.random() * 10000) + 1; // ID aléatoire entre 1 et 10000
+};
+
+// Génère le nom du décodeur
+const generateDecoderName = () => {
+  return `DEC${generateRandomId()}`; // Préfixe DEC avec l'ID aléatoire
 };
 </script>
-
-<style scoped>
-/* Style du formulaire */
-.create-decoder {
-  width: 100%;
-  max-width: 100%; /* Augmenter la largeur à 1000px pour grands écrans */
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f7f7f7;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  text-align: center;
-  color: #4a4a4a;
-  font-size: 1.8em;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 1.5em;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5em;
-  font-weight: bold;
-  font-size: 1em;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-  margin-bottom: 0.8em;
-}
-
-button {
-  padding: 0.8em 2em;
-  margin: 1em 0;
-  background-color: #bbdfc6; /* Couleur violet ou ton principal */
-  color: #028C51;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.2em;
-  font-weight: bold;
-  width: 48%; /* Les boutons prennent chacun environ la moitié de la largeur */
-}
-
-button:hover {
-  background-color: #c2eacd;
-}
-
-button[type="button"] {
-  background-color: #bbdfc6; /* Couleur pour le bouton réinitialiser */
-}
-
-button[type="button"]:hover {
-  background-color: #c2eacd;
-}
-
-.form-buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1em; /* Ajouter un écart entre les boutons */
-}
-
-@media (max-width: 768px) {
-  .create-decoder {
-    width: 90%;
-    padding: 15px;
-  }
-  button {
-    font-size: 1em;
-    padding: 0.8em 1.5em;
-  }
-}
-
-@media (max-width: 480px) {
-  h2 {
-    font-size: 1.5em;
-  }
-  .create-decoder {
-    padding: 10px;
-  }
-  button {
-    padding: 0.6em 1.2em;
-    font-size: 0.9em;
-    width: 100%; /* Les boutons prennent toute la largeur sur les petits écrans */
-  }
-  .form-buttons {
-    flex-direction: column; /* Empiler les boutons sur les petits écrans */
-  }
-}
-</style>
 

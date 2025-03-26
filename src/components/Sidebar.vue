@@ -72,7 +72,9 @@ export default {
   left: 0;
   top: 0;
   overflow-y: auto;
+  z-index: 1000; /* Assure-toi qu'il a un z-index supérieur */
 }
+
 
 /* TITRE */
 .sidebar-title {
@@ -129,4 +131,6 @@ export default {
 .rotated {
   transform: rotate(90deg);
 }
+
+
 </style>

@@ -1,42 +1,32 @@
 <template>
-  <div class="dissociate-decoder">
-    <h2>Dissocier un Décodeur d'un Client</h2>
+  <div class="background-wrapper">
+    <div class="container">
+      <form class="form dissociate-decoder">
+        <p class="title">Dissocier un décodeur </p>
 
-    <form @submit.prevent="handleSubmit">
-      <!-- Liste déroulante des décodeurs -->
-      <div class="form-group">
-        <label for="decoder">Sélectionner un décodeur</label>
-        <select id="decoder" v-model="selectedDecoder" required>
-          <option v-for="decoder in decoders" :key="decoder.id" :value="decoder.id">
-            {{ decoder.name }}
-          </option>
-        </select>
-      </div>
+        <label>
+          <select v-model="selectedDecoder" class="input" required>
+            <option v-for="decoder in decoders" :key="decoder.id" :value="decoder.id">
+              {{ decoder.name }}
+            </option>
+          </select>
+          <span>Sélectionner un décodeur</span>
+        </label>
 
-      <!-- Liste déroulante des clients -->
-      <div class="form-group">
-        <label for="client">Sélectionner un client</label>
-        <select id="client" v-model="selectedClient" required>
-          <option v-for="client in clients" :key="client.id" :value="client.id">
-            {{ client.name }}
-          </option>
-        </select>
-      </div>
+        <label>
+          <select v-model="selectedClient" class="input" required>
+            <option v-for="client in clients" :key="client.id" :value="client.id">
+              {{ client.name }}
+            </option>
+          </select>
+          <span>Sélectionner un client</span>
+        </label>
 
-      <!-- Boutons -->
-      <div class="form-buttons">
-        <button type="button" @click="cancel">Annuler</button>
-        <button type="submit">Valider</button>
-      </div>
-    </form>
-
-    <!-- Pop-up de confirmation -->
-    <div v-if="showConfirmPopup" class="popup">
-      <div class="popup-content">
-        <p>Êtes-vous sûr de vouloir dissocier ce décodeur du client ?</p>
-        <button @click="confirmDissociation">Oui</button>
-        <button @click="cancelConfirmation">Non</button>
-      </div>
+        <div class="button-group">
+          <button class="submit" type="submit">Valider</button>
+          <button class="cancel" type="button" @click="cancel">Annuler</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -56,152 +46,171 @@ export default {
         { id: 1, name: 'Client 1' },
         { id: 2, name: 'Client 2' },
         { id: 3, name: 'Client 3' }
-      ],
-      showConfirmPopup: false
+      ]
     };
   },
   methods: {
-    handleSubmit() {
-      this.showConfirmPopup = true;
-    },
     cancel() {
       this.selectedDecoder = null;
       this.selectedClient = null;
-    },
-    confirmDissociation() {
-      console.log(`Décodeur ${this.selectedDecoder} dissocié du client ${this.selectedClient}`);
-      this.selectedDecoder = null;
-      this.selectedClient = null;
-      this.showConfirmPopup = false;
-      this.$router.go(0); // Rafraîchir la page pour réinitialiser le formulaire
-    },
-    cancelConfirmation() {
-      this.showConfirmPopup = false;
     }
   }
 };
 </script>
 
 <style scoped>
-/* Style du formulaire (même que CreateDecoder.vue et AssociateDecoder.vue) */
-.dissociate-decoder {
-  width: 100%;
-  max-width: 100%;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f7f7f7;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
-h2 {
-  text-align: center;
-  color: #4a4a4a;
-  font-size: 1.8em;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 1.5em;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5em;
-  font-weight: bold;
-  font-size: 1em;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-  margin-bottom: 0.8em;
-}
-
-button {
-  padding: 0.8em 2em;
-  margin: 1em 0;
-  background-color: #bbdfc6; /* Couleur violet ou ton principal */
-  color: #028C51;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.2em;
-  font-weight: bold;
-  width: 48%;
-}
-
-button:hover {
-  background-color: #c2eacd;
-}
-
-button[type="button"] {
-  background-color: #bbdfc6; /* Couleur pour le bouton annuler */
-}
-
-button[type="button"]:hover {
-  background-color: #c2eacd;
-}
-
-.form-buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1em;
-}
-
-.popup {
-  position: fixed;
+.background-wrapper {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  background-color: #dfefe3; /* Assure-toi qu'une couleur de fond est appliquée */
+}
+
+
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
-.popup-content {
-  background: white;
-  padding: 20px;
-  text-align: center;
-  border-radius: 5px;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
 }
 
-.popup-content button {
-  margin: 5px;
+.form:hover {
+  box-shadow: 0 0 20px rgba(2, 140, 81, 0.4);
 }
 
-@media (max-width: 768px) {
-  .dissociate-decoder {
-    width: 90%;
-    padding: 15px;
-  }
-  button {
-    font-size: 1em;
-    padding: 0.8em 1.5em;
-  }
+.title {
+  font-size: 26px;
+  color: #028C51;
+  font-weight: 600;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
 }
 
-@media (max-width: 480px) {
-  h2 {
-    font-size: 1.5em;
+.title::before,
+.title::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #028C51;
+}
+
+.title::after {
+  animation: pulse 1.2s linear infinite;
+}
+
+.form label {
+  position: relative;
+}
+
+.form label .input {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.form label .input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: grey;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:focus + span,
+.form label .input:valid + span {
+  top: 30px;
+  font-size: 0.75em;
+  font-weight: 600;
+  background-color: #ffffff;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center; /* Centrer les boutons */
+  gap: 15px;
+}
+
+/* 🌟 STYLE DES BOUTONS 🌟 */
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer; /* Ajout de la propriété pour le curseur */
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 40px;
+  padding: 14px 24px;
+  transition: 0.3s;
+  box-shadow: -4px -2px 16px 0px #ffffff, 4px 2px 16px 0px rgba(2, 140, 81, 0.5);
+}
+
+.submit {
+  background-color: #028C51;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.submit:hover {
+  background-color: #026B3F;
+  box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px rgba(2, 140, 81, 0.6);
+}
+
+.cancel {
+  background-color: #BBDFC6;
+  color: #028C51;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancel:hover {
+  background-color: #99C8A6;
+  box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px rgba(187, 223, 198, 0.5);
+}
+
+button:active {
+  box-shadow: none;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
   }
-  .dissociate-decoder {
-    padding: 10px;
-  }
-  button {
-    padding: 0.6em 1.2em;
-    font-size: 0.9em;
-    width: 100%;
-  }
-  .form-buttons {
-    flex-direction: column;
+  to {
+    transform: scale(1.8);
+    opacity: 0;
   }
 }
 </style>
