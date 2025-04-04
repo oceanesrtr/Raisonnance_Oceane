@@ -71,32 +71,6 @@
   position: relative;
 }
 
-.form label .input {
-  width: 100%;
-  padding: 10px 10px 20px 10px;
-  outline: 0;
-  border: 1px solid rgba(105, 105, 105, 0.397);
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-.form label .input + span {
-  position: absolute;
-  left: 10px;
-  top: 15px;
-  color: grey;
-  font-size: 0.9em;
-  cursor: text;
-  transition: 0.3s ease;
-}
-
-.form label .input:focus + span,
-.form label .input:valid + span {
-  top: 30px;
-  font-size: 0.75em;
-  font-weight: 600;
-  background-color: #ffffff;
-}
 
 .button-group {
   display: flex;
@@ -163,7 +137,37 @@ button:active {
 
 
 
-/* Pour les autres champs (Modèle, Client) garder l'ancien style */
+
+.form label .input_readonly {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.form label .input_readonly + span {
+  position: absolute;
+  left: 10px;
+  top: 30px;
+  color: grey;
+  font-size: 0.75em;
+  cursor: text;
+  font-weight: 600;
+  background-color: #ffffff;
+
+}
+
+.form label .input {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+  font-size: 16px;
+}
+
 .form label .input + span {
   position: absolute;
   left: 10px;
@@ -173,64 +177,92 @@ button:active {
   cursor: text;
   transition: 0.3s ease;
 }
+
+.form label .input:focus + span,
+.form label .input:valid + span {
+  top: 30px;
+  font-size: 0.75em;
+  font-weight: 600;
+  background-color: #ffffff;
+}
 </style>
 
 <template>
   <div class="background-wrapper">
     <div class="finisher-header"></div>
     <div class="container">
-      <form class="form">
+      <form class="form" @submit.prevent="createDecoder">
         <p class="title">Ajouter un décodeur</p>
 
+        <!-- ID du décodeur (Généré automatiquement) -->
         <label>
-          <input required v-model="model" type="text" class="input">
-          <span>Modèle</span>
+          <input v-model="decoderId" type="text" class="input_readonly" readonly>
+          <span>ID du Décodeur</span>
         </label>
 
-
+        <!-- Adresse IP (Plage 127.0.10.1 - 127.0.10.12) -->
         <label>
-          <select v-model="selectedClient" class="input" required>
-            <option v-for="client in clients" :key="client.id" :value="client.id">
-              {{ client.name }}
+          <select v-model="decoderIp" class="input" required>
+            <option v-for="ip in availableIps" :key="ip" :value="ip">
+              {{ ip }}
             </option>
           </select>
-          <span>Client Associé</span>
+          <span>Adresse IP</span>
+        </label>
+
+        <!-- État du Décodeur -->
+        <label>
+          <select v-model="decoderState" class="input" required>
+            <option value="Active">Actif</option>
+            <option value="Inactive">Inactif</option>
+          </select>
+          <span>État Initial</span>
         </label>
 
         <div class="button-group">
-          <button class="submit">Valider</button>
-          <button type="button" class="cancel">Annuler</button>
+          <button type="submit" class="submit">Valider</button>
+          <button type="button" class="cancel" @click="resetForm">Annuler</button>
         </div>
       </form>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup>
+import { ref, onMounted } from 'vue';
 
-// Données du formulaire
-const model = ref('');
-const decoderName = ref('');
+// États réactifs
 const decoderId = ref('');
+const decoderIp = ref(null);
+const decoderState = ref('Active');
 
-// Liste des clients (exemple)
-const clients = ref([
-  { id: 1, name: 'Client 1' },
-  { id: 2, name: 'Client 2' },
-  { id: 3, name: 'Client 3' }
-]);
+// Liste des adresses IP valides
+const availableIps = Array.from({ length: 12 }, (_, i) => `127.0.10.${i + 1}`);
 
-const selectedClient = ref(null);
-
-// Génère un ID de décodeur aléatoire
-const generateRandomId = () => {
-  return Math.floor(Math.random() * 10000) + 1; // ID aléatoire entre 1 et 10000
+// Génération d'un ID de décodeur aléatoire
+const generateDecoderId = () => {
+  return ` DEC${Math.floor(Math.random() * 10000) + 1}`;
 };
 
-// Génère le nom du décodeur
-const generateDecoderName = () => {
-  return `DEC${generateRandomId()}`; // Préfixe DEC avec l'ID aléatoire
+// Créer un décodeur (fonction à relier au backend Firebase plus tard)
+const createDecoder = () => {
+  console.log("Décodeur créé:", {
+    id: decoderId.value,
+    ip: decoderIp.value,
+    state: decoderState.value,
+  });
 };
+
+// Réinitialisation du formulaire
+const resetForm = () => {
+  decoderId.value = generateDecoderId();
+  decoderIp.value = null;
+  decoderState.value = 'Active';
+};
+
+// Générer un ID au chargement de la page
+onMounted(() => {
+  decoderId.value = generateDecoderId();
+});
 </script>
 
